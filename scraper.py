@@ -19,6 +19,8 @@ cities = ["tehran", "mashhad", "karaj", "shiraz", "isfahan", "ahvaz", "tabriz", 
 categories = []
 dataIndexes = set()
 links = []
+data = {}
+enteredCity = 1
 
 try:
     print("Enter The Cities:")
@@ -29,7 +31,7 @@ try:
     
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "kt-accordion-item__header")))
     
-    categoriesTemp = driver.find_elements(by=By.CLASS_NAME, value="kt-accordion-item__header")
+    categoriesTemp = driver.find_elements(By.CLASS_NAME, "kt-accordion-item__header")
     for category in categoriesTemp:
         categories.append(category)
     
@@ -84,6 +86,52 @@ finally:
     print("Work finished. Closing...")
     driver.quit()
 
-with open("links.txt", "w") as file:
-    for link in links:
-        file.write(link + "\n")
+driver = webdriver.Chrome(options=options)
+i = 1
+for link in links:
+    driver.get(link)
+    try:
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'post-actions__get-contact')))
+        contact_button = driver.find_element(By.CLASS_NAME, 'post-actions__get-contact')
+        if contact_button:
+            contact_button.click()
+            if i == 1:
+                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'kt-textfield__input')))
+                phone_input = driver.find_element(By.CLASS_NAME, 'kt-textfield__input')
+                phone_number = input("Enter your phone number: ")
+                phone_input.send_keys(phone_number)
+                
+                WebDriverWait(driver, 10).until(EC.staleness_of(phone_input))
+                sms_input = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'kt-textfield__input')))
+                sms_code = input("Enter the sms sent to your phone: ")
+                sms_input.send_keys(sms_code)
+                
+                WebDriverWait(driver, 10).until(EC.staleness_of(sms_input))
+            
+            time.sleep(1)
+
+            title = driver.find_element(By.CLASS_NAME, 'kt-page-title__title').text
+            time_element = driver.find_element(By.CLASS_NAME, 'kt-page-title__subtitle').text
+            phone = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'kt-unexpandable-row__action'))).text
+            data[link] = {
+                "title": title,
+                "time": time_element,
+                "phone": phone
+            }
+
+            print(f"data {i} processed successfully.")
+            i += 1
+        
+    except Exception as e:
+        print(f"An error occurred while processing link {link}: {e}")
+        continue
+
+with open(f"{cities[enteredCity - 1] + str(len(links))}.txt", "w", encoding='utf-8') as file:
+    for link, info in data.items():
+        file.write(f"Link: {link}\n")
+        for key, value in info.items():
+            file.write(f"{key.capitalize()}: {value}\n")
+        file.write("\n")
+
+print("Finished Scraping The Data. Closing...")
+driver.quit()
