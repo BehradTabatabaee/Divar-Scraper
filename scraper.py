@@ -18,6 +18,7 @@ driver = webdriver.Chrome(options=options)
 cities = ["tehran", "mashhad", "karaj", "shiraz", "isfahan", "ahvaz", "tabriz", "kermanshah", "qom", "rasht"]
 categories = []
 dataIndexes = set()
+links = []
 
 try:
     print("Enter The Cities:")
@@ -46,16 +47,22 @@ try:
         try:
             indexes = driver.find_elements(By.CSS_SELECTOR, '[data-index]')
             for index in indexes:
-                data_index = index.get_attribute('data-index')
-                if data_index not in dataIndexes:
-                    dataIndexes.add(data_index)
+                if index not in dataIndexes:
+                    dataIndexes.add(index)
                     loaded_indexes += 1
                     print(f"Loaded indexes: {loaded_indexes}")
+                    
+                    item_container = index.find_element(By.CLASS_NAME, 'post-list__items-container-e437f')
+                    widget_cols = item_container.find_elements(By.CLASS_NAME, 'post-list__widget-col-a3fe3')
+                    for widget in widget_cols:
+                        link = widget.find_element(By.TAG_NAME, 'a').get_attribute('href')
+                        links.append(link)
+                    
                     if loaded_indexes >= datanum:
                         break
 
             try:
-                load_more_button = driver.find_element(By.CLASS_NAME, value = 'post-list__load-more-btn-d46f4')
+                load_more_button = driver.find_element(By.CLASS_NAME, value='post-list__load-more-btn-d46f4')
                 if load_more_button:
                     load_more_button.click()
                     WebDriverWait(driver, 10).until(EC.staleness_of(load_more_button))
@@ -68,12 +75,15 @@ try:
 
         current_scroll += 100
         driver.execute_script(f"window.scrollTo(0, {current_scroll});")
-        time.sleep(0.025)  # Add a short sleep to give time for new elements to load
-
-    input()
+        time.sleep(0.025)
+        
 except Exception as e:
     print(f"An error occurred: {e}")
 
 finally:
     print("Work finished. Closing...")
     driver.quit()
+
+with open("links.txt", "w") as file:
+    for link in links:
+        file.write(link + "\n")
