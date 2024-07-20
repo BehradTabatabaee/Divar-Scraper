@@ -88,3 +88,7 @@ Enter the sms sent to your phone: 123456
 - The script handles dynamic loading of ads by scrolling and clicking the "load more" button as necessary.
 - The scraper includes error handling to manage potential issues such as stale elements or network delays.
 - Ensure you have a stable internet connection while running the scraper.
+
+## Contributions
+
+Pull requests are welcome!
