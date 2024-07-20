@@ -7,7 +7,7 @@ This project is a web scraper designed to extract advertisement data from the Di
 - Select from a list of predefined cities.
 - Choose a category to scrape ads from.
 - Specify the number of ads to scrape.
-- Collects ad details including title, time of posting, and contact phone number (find price and description yourself using the provided link).
+- Collects ad details including title, time of posting, and contact phone number (find price and description yourself using the provided link, or customize the script for your own use case).
 - Handles user authentication by prompting for phone number and SMS code.
 - Outputs the scraped data to a text file.
 
