@@ -25,13 +25,13 @@ This project is a web scraper designed to extract advertisement data from the Di
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/divar-scraper.git
-    cd divar-scraper
+    git clone https://github.com/BehradTabatabaee/Divar-Scraper
+    cd Divar-Scraper
     ```
 
 2. **Install the required packages:**
     ```bash
-    pip install selenium arabic_reshaper python-bidi
+    pip install -r ./requirements.txt
     ```
 
 3. **Download ChromeDriver:**
