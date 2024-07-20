@@ -1,5 +1,7 @@
 # Divar Scraper
 
+THIS IS JUST AN SCRIPT THAT I FOUND MYSELF IN NEED OF. USE AT YOUR OWN RISK
+
 This project is a web scraper designed to extract advertisement data from the Divar website, which is a popular platform in Iran for people to buy and sell various items, including real estate, vehicles, electronics, and more. The scraper allows you to specify a city and category to scrape ads from and retrieves the ad details such as the title, time of posting, and contact phone number.
 
 ## Features
